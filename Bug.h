@@ -32,6 +32,7 @@ public:
     int getId() const;
     pair<int, int> getPosition() const;
     int getDirection() const;
+    string getDirectionStr() const;
     int getHealth() const;
     bool isAlive() const;
     list<pair<int, int>> getPath() const;

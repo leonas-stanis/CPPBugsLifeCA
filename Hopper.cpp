@@ -45,3 +45,7 @@ void Hopper::move() {
 string Hopper::getType() const {
     return "Hopper";
 }
+
+int Hopper::getHopLength() const {
+    return hopLength;
+}

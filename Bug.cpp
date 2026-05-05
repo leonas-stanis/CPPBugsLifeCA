@@ -26,6 +26,15 @@ bool Bug::isWayBlocked() {
 int Bug::getId() const { return id; }
 pair<int, int> Bug::getPosition() const { return position; }
 int Bug::getDirection() const { return direction; }
+string Bug::getDirectionStr() const {
+    switch (direction) {
+        case NORTH: return "North";
+        case EAST:  return "East";
+        case SOUTH: return "South";
+        case WEST:  return "West";
+        default:    return "Unknown";
+    }
+}
 int Bug::getHealth() const { return health; }
 bool Bug::isAlive() const { return alive; }
 list<pair<int, int>> Bug::getPath() const { return path; }
