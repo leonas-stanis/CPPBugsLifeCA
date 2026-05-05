@@ -7,6 +7,7 @@
 
 #include <utility>
 #include <list>
+#include <string>
 
 using namespace std;
 
@@ -25,6 +26,7 @@ public:
     Bug(int id, pair<int, int> position, int direction, int health);
     virtual ~Bug() = default;
     virtual void move() = 0;
+    virtual string getType() const = 0;
     bool isWayBlocked();
 
     int getId() const;
