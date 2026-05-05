@@ -224,3 +224,30 @@ void Board::tap() {
         }
     }
 }
+void Board::displayLifeHistory() const {
+    if (bugs.empty()) {
+        cout << "No bugs to display.\n";
+        return;
+    }
+
+    cout << "\n--- Life History of All Bugs ---\n";
+    for (const Bug* bug : bugs) {
+        cout << bug->getId() << " " << bug->getType() << " Path: ";
+
+        const auto& path = bug->getPath();
+        bool first = true;
+        for (const auto& pos : path) {
+            if (!first) cout << ",";
+            cout << "(" << pos.first << "," << pos.second << ")";
+            first = false;
+        }
+
+        if (!bug->isAlive()) {
+            cout << " Dead";
+        } else {
+            cout << " Alive!";
+        }
+        cout << "\n";
+    }
+    cout << "-------------------------------\n";
+}
