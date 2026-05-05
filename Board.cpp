@@ -251,3 +251,32 @@ void Board::displayLifeHistory() const {
     }
     cout << "-------------------------------\n";
 }
+
+void Board::displayAllCells() const {
+    if (bugs.empty()) {
+        cout << "No bugs loaded. Load a file first.\n";
+        return;
+    }
+
+    cout << "\n--- Cell Occupancy ---\n";
+    auto cellMap = getCellOccupancy();
+
+    for (int y = 0; y < 10; y++) {
+        for (int x = 0; x < 10; x++) {
+            cout << "(" << x << "," << y << "): ";
+            auto it = cellMap.find({x, y});
+            if (it == cellMap.end() || it->second.empty()) {
+                cout << "empty\n";
+            } else {
+                bool first = true;
+                for (const Bug* bug : it->second) {
+                    if (!first) cout << ", ";
+                    cout << bug->getType() << " " << bug->getId();
+                    first = false;
+                }
+                cout << "\n";
+            }
+        }
+    }
+    cout << "---------------------\n";
+}
