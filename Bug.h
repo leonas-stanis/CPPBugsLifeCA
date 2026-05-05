@@ -20,10 +20,13 @@ protected:
     int direction;
     int health;
     bool alive;
+    int eatenBy;   // ID of the bug that ate this one (-1 if alive / not eaten)
     list<pair<int, int>> path;
 
 public:
     Bug(int id, pair<int, int> position, int direction, int health);
+    int getEatenBy() const;
+    void setEatenBy(int bugId);
     virtual ~Bug() = default;
     virtual void move() = 0;
     virtual string getType() const = 0;

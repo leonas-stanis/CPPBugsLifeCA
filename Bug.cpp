@@ -5,7 +5,7 @@
 #include "Bug.h"
 
 Bug::Bug(int id, pair<int, int> position, int direction, int health)
-    : id(id), position(position), direction(direction), health(health), alive(true) {
+    : id(id), position(position), direction(direction), health(health), alive(true), eatenBy(-1) {
     path.push_back(position);
 }
 
@@ -38,6 +38,9 @@ string Bug::getDirectionStr() const {
 int Bug::getHealth() const { return health; }
 bool Bug::isAlive() const { return alive; }
 list<pair<int, int>> Bug::getPath() const { return path; }
+
+int Bug::getEatenBy() const { return eatenBy; }
+void Bug::setEatenBy(int bugId) { eatenBy = bugId; }
 
 void Bug::setPosition(pair<int, int> newPos) { position = newPos; }
 void Bug::setDirection(int newDir) { direction = newDir; }

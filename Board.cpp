@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
+#include <ctime>
 #include <algorithm>
 #include <thread>
 #include <chrono>
@@ -168,11 +170,13 @@ void Board::fight() {
                 if (bug1->getHealth() <= 0) {
                     bug1->setHealth(0);
                     bug1->setAlive(false);
+                    if (bug2->isAlive()) bug1->setEatenBy(bug2->getId());
                     cout << "      Bug " << bug1->getId() << " defeated in round " << round << "!\n";
                 }
                 if (bug2->getHealth() <= 0) {
                     bug2->setHealth(0);
                     bug2->setAlive(false);
+                    if (bug1->isAlive()) bug2->setEatenBy(bug1->getId());
                     cout << "      Bug " << bug2->getId() << " defeated in round " << round << "!\n";
                 }
             }
@@ -248,7 +252,12 @@ void Board::displayLifeHistory() const {
         }
 
         if (!bug->isAlive()) {
-            cout << " Dead";
+            int eater = bug->getEatenBy();
+            if (eater != -1) {
+                cout << " Eaten by " << eater;
+            } else {
+                cout << " Dead";
+            }
         } else {
             cout << " Alive!";
         }
