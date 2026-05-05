@@ -309,7 +309,7 @@ void Board::writeLifeHistoryToFile() const {
     time_t now = time(nullptr);
     char buffer[80];
     struct tm* timeinfo = localtime(&now);
-    strftime(buffer, sizeof(buffer), "bugs_life_history_%Y%m%d_%H%M%S.out", timeinfo);
+    strftime(buffer, sizeof(buffer), "outputs/bugs_life_history_%Y%m%d_%H%M%S.out", timeinfo);
 
     string filename(buffer);
     ofstream file(filename);
