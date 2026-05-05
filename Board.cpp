@@ -91,3 +91,24 @@ void Board::displayAllBugs() const {
     }
     cout << "----------------\n";
 }
+
+void Board::findBug(int id) const {
+    for (const Bug* bug : bugs) {
+        if (bug->getId() == id) {
+            cout << "\nBug " << id << " found:\n";
+            cout << "Type: " << bug->getType() << "\n";
+            cout << "Position: (" << bug->getPosition().first << ","
+                 << bug->getPosition().second << ")\n";
+            cout << "Direction: " << bug->getDirectionStr() << "\n";
+            cout << "Health: " << bug->getHealth() << "\n";
+            cout << "Status: " << (bug->isAlive() ? "Alive" : "Dead") << "\n";
+
+            const Hopper* hopper = dynamic_cast<const Hopper*>(bug);
+            if (hopper) {
+                cout << "Hop Length: " << hopper->getHopLength() << "\n";
+            }
+            return;
+        }
+    }
+    cout << "Bug " << id << " not found.\n";
+}
