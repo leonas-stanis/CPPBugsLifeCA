@@ -180,3 +180,47 @@ void Board::fight() {
         }
     }
 }
+
+void Board::tap() {
+    // Collect indices of alive bugs
+    vector<size_t> aliveIndices;
+    for (size_t i = 0; i < bugs.size(); i++) {
+        if (bugs[i]->isAlive()) {
+            aliveIndices.push_back(i);
+        }
+    }
+
+    if (aliveIndices.empty()) {
+        cout << "No alive bugs to move.\n";
+        return;
+    }
+
+    // Choose one random alive bug to freeze
+    size_t frozenIdx = aliveIndices[rand() % aliveIndices.size()];
+    cout << "Bug " << bugs[frozenIdx]->getId() << " is frozen and will not move this tap.\n";
+
+    // Move all alive bugs except the frozen one
+    for (size_t i = 0; i < bugs.size(); i++) {
+        if (bugs[i]->isAlive() && i != frozenIdx) {
+            bugs[i]->move();
+        }
+    }
+
+    cout << "All alive bugs (except frozen) have moved.\n";
+
+    // Fight after movement
+    fight();
+
+    // Report alive count and check for end condition
+    int alive = countAlive();
+    cout << "Alive bugs remaining: " << alive << "\n";
+    if (alive <= 1) {
+        cout << "\n*** The Last Bug Standing is Bug ";
+        for (const Bug* bug : bugs) {
+            if (bug->isAlive()) {
+                cout << bug->getId() << " (" << bug->getType() << ") ***\n";
+                break;
+            }
+        }
+    }
+}
