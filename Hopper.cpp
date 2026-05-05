@@ -1,4 +1,5 @@
 #include "Hopper.h"
+#include "Constants.h"
 #include <cstdlib>
 
 Hopper::Hopper(int id, pair<int, int> position, int direction, int health, int hopLength)
@@ -23,11 +24,11 @@ void Hopper::move() {
             break;
         case EAST:
             newX += hopLength;
-            if (newX > 9) newX = 9;
+            if (newX >= DEFAULT_BOARD_WIDTH) newX = DEFAULT_BOARD_WIDTH - 1;
             break;
         case SOUTH:
             newY += hopLength;
-            if (newY > 9) newY = 9;
+            if (newY >= DEFAULT_BOARD_HEIGHT) newY = DEFAULT_BOARD_HEIGHT - 1;
             break;
         case WEST:
             newX -= hopLength;

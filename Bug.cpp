@@ -3,6 +3,7 @@
 //
 
 #include "Bug.h"
+#include "Constants.h"
 
 Bug::Bug(int id, pair<int, int> position, int direction, int health)
     : id(id), position(position), direction(direction), health(health), alive(true), eatenBy(-1) {
@@ -14,9 +15,9 @@ bool Bug::isWayBlocked() {
         case NORTH:
             return position.second == 0;
         case EAST:
-            return position.first == 9;
+            return position.first == DEFAULT_BOARD_WIDTH - 1;
         case SOUTH:
-            return position.second == 9;
+            return position.second == DEFAULT_BOARD_HEIGHT - 1;
         case WEST:
             return position.first == 0;
     }

@@ -11,6 +11,8 @@ using namespace std;
 class Board {
 private:
     vector<Bug*> bugs;
+    int width;
+    int height;
 
     // Build occupancy map of cell -> alive bugs (internal helper)
     map<pair<int, int>, vector<Bug*>> getCellOccupancy() const;
@@ -21,6 +23,13 @@ private:
 public:
     Board();
     ~Board();
+
+    // Set board dimensions
+    void setBoardSize(int w, int h);
+
+    // Get board dimensions
+    int getWidth() const;
+    int getHeight() const;
 
     // Load bugs from a semicolon-delimited text file
     void loadFromFile(const string& filename);

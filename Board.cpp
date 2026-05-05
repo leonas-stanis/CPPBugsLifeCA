@@ -2,6 +2,7 @@
 #include "Crawler.h"
 #include "Hopper.h"
 #include "KnightBug.h"
+#include "Constants.h"
 
 #include <iostream>
 #include <fstream>
@@ -13,7 +14,20 @@
 #include <chrono>
 
 
-Board::Board() = default;
+Board::Board() : width(DEFAULT_BOARD_WIDTH), height(DEFAULT_BOARD_HEIGHT) {}
+
+void Board::setBoardSize(int w, int h) {
+    if (w < 5 || w > 50 || h < 5 || h > 50) {
+        cout << "Invalid size. Please use dimensions between 5 and 50.\n";
+        return;
+    }
+    width = w;
+    height = h;
+    cout << "Board size set to " << width << "x" << height << ".\n";
+}
+
+int Board::getWidth() const { return width; }
+int Board::getHeight() const { return height; }
 
 Board::~Board() {
     for (Bug* bug : bugs) {
@@ -54,6 +68,14 @@ void Board::loadFromFile(const string& filename) {
         int y = stoi(fields[3]);
         int dir = stoi(fields[4]);
         int health = stoi(fields[5]);
+
+        // Validate bug position is within board bounds
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            cout << "Warning: Bug " << id << " at (" << x << "," << y
+                 << ") is outside the " << width << "x" << height
+                 << " board. Skipping.\n";
+            continue;
+        }
 
         Bug* bug = nullptr;
         if (type == 'C' || type == 'c') {
@@ -275,8 +297,8 @@ void Board::displayAllCells() const {
     cout << "\n--- Cell Occupancy ---\n";
     auto cellMap = getCellOccupancy();
 
-    for (int y = 0; y < 10; y++) {
-        for (int x = 0; x < 10; x++) {
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
             cout << "(" << x << "," << y << "): ";
             auto it = cellMap.find({x, y});
             if (it == cellMap.end() || it->second.empty()) {

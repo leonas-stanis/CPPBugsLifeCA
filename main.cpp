@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void displayMenu() {
+void displayMenu(const Board& board) {
     cout << "\n===== A Bug's Life - Bug Board Simulator =====\n";
     cout << "1. Initialize Bug Board (load data from file)\n";
     cout << "2. Display all Bugs\n";
@@ -15,6 +15,7 @@ void displayMenu() {
     cout << "6. Display all Cells listing their Bugs\n";
     cout << "7. Run simulation (generates a Tap every second)\n";
     cout << "8. Exit (write Life History of all Bugs to file)\n";
+    cout << "9. Set Board Size (current: " << board.getWidth() << "x" << board.getHeight() << ")\n";
     cout << "==============================================\n";
     cout << "Enter your choice: ";
 }
@@ -26,7 +27,7 @@ int main() {
     int choice;
 
     do {
-        displayMenu();
+        displayMenu(board);
         cin >> choice;
 
         switch (choice) {
@@ -67,8 +68,28 @@ int main() {
                 board.writeLifeHistoryToFile();
                 break;
 
+            case 9: {
+                int w, h;
+                cout << "Enter board width (5-50): ";
+                if (!(cin >> w)) {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Invalid input. Please enter a number.\n";
+                    break;
+                }
+                cout << "Enter board height (5-50): ";
+                if (!(cin >> h)) {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Invalid input. Please enter a number.\n";
+                    break;
+                }
+                board.setBoardSize(w, h);
+                break;
+            }
+
             default:
-                cout << "Invalid choice. Please enter 1-8.\n";
+                cout << "Invalid choice. Please enter 1-9.\n";
                 break;
         }
     } while (choice != 8);

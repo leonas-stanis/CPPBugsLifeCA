@@ -1,4 +1,5 @@
 #include "KnightBug.h"
+#include "Constants.h"
 #include <cstdlib>
 #include <vector>
 
@@ -20,7 +21,7 @@ void KnightBug::move() {
     for (const auto& move : knightMoves) {
         int newX = position.first + move.first;
         int newY = position.second + move.second;
-        if (newX >= 0 && newX <= 9 && newY >= 0 && newY <= 9) {
+        if (newX >= 0 && newX < DEFAULT_BOARD_WIDTH && newY >= 0 && newY < DEFAULT_BOARD_HEIGHT) {
             validMoves.push_back({newX, newY});
         }
     }
