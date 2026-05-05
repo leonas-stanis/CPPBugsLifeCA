@@ -1,8 +1,9 @@
 #include "Crawler.h"
 #include <cstdlib>
 
-Crawler::Crawler(int id, pair<int, int> position, int direction, int health)
-    : Bug(id, position, direction, health) {}
+Crawler::Crawler(int id, pair<int, int> position, int direction, int health,
+                 int boardWidth, int boardHeight)
+    : Bug(id, position, direction, health, boardWidth, boardHeight) {}
 
 void Crawler::move() {
     if (!alive) return;

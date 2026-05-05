@@ -2,8 +2,9 @@
 #include "Constants.h"
 #include <cstdlib>
 
-Hopper::Hopper(int id, pair<int, int> position, int direction, int health, int hopLength)
-    : Bug(id, position, direction, health), hopLength(hopLength) {}
+Hopper::Hopper(int id, pair<int, int> position, int direction, int health,
+               int hopLength, int boardWidth, int boardHeight)
+    : Bug(id, position, direction, health, boardWidth, boardHeight), hopLength(hopLength) {}
 
 void Hopper::move() {
     if (!alive) return;
@@ -24,11 +25,11 @@ void Hopper::move() {
             break;
         case EAST:
             newX += hopLength;
-            if (newX >= DEFAULT_BOARD_WIDTH) newX = DEFAULT_BOARD_WIDTH - 1;
+            if (newX >= boardWidth) newX = boardWidth - 1;
             break;
         case SOUTH:
             newY += hopLength;
-            if (newY >= DEFAULT_BOARD_HEIGHT) newY = DEFAULT_BOARD_HEIGHT - 1;
+            if (newY >= boardHeight) newY = boardHeight - 1;
             break;
         case WEST:
             newX -= hopLength;

@@ -13,4 +13,5 @@ add_executable(untitled main.cpp
         KnightBug.cpp
         KnightBug.h
         Board.cpp
-        Board.h)
+        Board.h
+        Constants.h)

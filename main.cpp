@@ -14,8 +14,8 @@ void displayMenu(const Board& board) {
     cout << "5. Display Life History of all Bugs\n";
     cout << "6. Display all Cells listing their Bugs\n";
     cout << "7. Run simulation (generates a Tap every second)\n";
-    cout << "8. Exit (write Life History of all Bugs to file)\n";
-    cout << "9. Set Board Size (current: " << board.getWidth() << "x" << board.getHeight() << ")\n";
+    cout << "8. Set Board Size (current: " << board.getWidth() << "x" << board.getHeight() << ")\n";
+    cout << "9. Exit (write Life History of all Bugs to file)\n";
     cout << "==============================================\n";
     cout << "Enter your choice: ";
 }
@@ -28,7 +28,12 @@ int main() {
 
     do {
         displayMenu(board);
-        cin >> choice;
+        if (!(cin >> choice)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Invalid input. Please enter a number between 1 and 9.\n";
+            continue;
+        }
 
         switch (choice) {
             case 1:
@@ -42,7 +47,12 @@ int main() {
             case 3: {
                 int id;
                 cout << "Enter bug ID: ";
-                cin >> id;
+                if (!(cin >> id)) {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Invalid input. Please enter a numeric ID.\n";
+                    break;
+                }
                 board.findBug(id);
                 break;
             }
@@ -63,12 +73,7 @@ int main() {
                 board.runSimulation();
                 break;
 
-            case 8:
-                cout << "Exiting...\n";
-                board.writeLifeHistoryToFile();
-                break;
-
-            case 9: {
+            case 8: {
                 int w, h;
                 cout << "Enter board width (5-50): ";
                 if (!(cin >> w)) {
@@ -88,11 +93,15 @@ int main() {
                 break;
             }
 
-            default:
-                cout << "Invalid choice. Please enter 1-9.\n";
+            case 9:
+                cout << "Exiting...\n";
+                board.writeLifeHistoryToFile();
+                break;
+                default:
+                    cout << "Invalid choice. Please enter 1-9.\n";
                 break;
         }
-    } while (choice != 8);
+    } while (choice != 9);
 
     return 0;
 }

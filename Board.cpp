@@ -4,6 +4,7 @@
 #include "KnightBug.h"
 #include "Constants.h"
 
+#include <set>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -21,9 +22,66 @@ void Board::setBoardSize(int w, int h) {
         cout << "Invalid size. Please use dimensions between 5 and 50.\n";
         return;
     }
+    int oldW = width, oldH = height;
     width = w;
     height = h;
-    cout << "Board size set to " << width << "x" << height << ".\n";
+
+    // Collect cells already occupied by bugs that stay in bounds
+    set<pair<int, int>> occupied;
+    vector<Bug*> toMove;
+
+    for (Bug* bug : bugs) {
+        bug->setBoardSize(w, h);
+        auto pos = bug->getPosition();
+        if (pos.first < width && pos.second < height) {
+            // Bug stays within new bounds
+            occupied.insert(pos);
+        } else {
+            // Bug needs repositioning
+            toMove.push_back(bug);
+        }
+    }
+
+    // Reposition each out-of-bounds bug to the nearest free cell
+    for (Bug* bug : toMove) {
+        auto pos = bug->getPosition();
+        // Clamp to nearest edge as starting search point
+        int cx = min(pos.first, width - 1);
+        int cy = min(pos.second, height - 1);
+
+        // Spiral outward from (cx, cy) looking for a free cell
+        bool found = false;
+        for (int radius = 0; radius < max(width, height) && !found; radius++) {
+            for (int dx = -radius; dx <= radius && !found; dx++) {
+                for (int dy = -radius; dy <= radius && !found; dy++) {
+                    // Only check cells at exactly this radius (Manhattan-style ring)
+                    if (abs(dx) != radius && abs(dy) != radius) continue;
+                    int nx = cx + dx;
+                    int ny = cy + dy;
+                    if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                        if (occupied.find({nx, ny}) == occupied.end()) {
+                            bug->setPosition({nx, ny});
+                            occupied.insert({nx, ny});
+                            found = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!found) {
+            // Fallback: shouldn't happen on a board with free cells
+            bug->setPosition({cx, cy});
+            occupied.insert({cx, cy});
+        }
+    }
+
+    int clamped = (int)toMove.size();
+    cout << "Board size changed from " << oldW << "x" << oldH
+         << " to " << width << "x" << height << ".\n";
+    if (clamped > 0) {
+        cout << "Warning: " << clamped << " bug(s) were outside the new bounds and have been repositioned.\n";
+    }
 }
 
 int Board::getWidth() const { return width; }
@@ -79,12 +137,12 @@ void Board::loadFromFile(const string& filename) {
 
         Bug* bug = nullptr;
         if (type == 'C' || type == 'c') {
-            bug = new Crawler(id, {x, y}, dir, health);
+            bug = new Crawler(id, {x, y}, dir, health, width, height);
         } else if (type == 'H' || type == 'h') {
             int hopLength = (fields.size() >= 7) ? stoi(fields[6]) : 2;
-            bug = new Hopper(id, {x, y}, dir, health, hopLength);
+            bug = new Hopper(id, {x, y}, dir, health, hopLength, width, height);
         } else if (type == 'K' || type == 'k') {
-            bug = new KnightBug(id, {x, y}, dir, health);
+            bug = new KnightBug(id, {x, y}, dir, health, width, height);
         }
 
         if (bug) {

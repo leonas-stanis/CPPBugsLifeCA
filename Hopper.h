@@ -8,7 +8,8 @@ private:
     int hopLength;
 
 public:
-    Hopper(int id, pair<int, int> position, int direction, int health, int hopLength);
+    Hopper(int id, pair<int, int> position, int direction, int health,
+           int hopLength, int boardWidth = 10, int boardHeight = 10);
     void move() override;
     string getType() const override;
     int getHopLength() const;

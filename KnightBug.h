@@ -5,7 +5,8 @@
 
 class KnightBug : public Bug {
 public:
-    KnightBug(int id, pair<int, int> position, int direction, int health);
+    KnightBug(int id, pair<int, int> position, int direction, int health,
+              int boardWidth = 10, int boardHeight = 10);
     void move() override;
     string getType() const override;
 };

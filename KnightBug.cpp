@@ -3,8 +3,9 @@
 #include <cstdlib>
 #include <vector>
 
-KnightBug::KnightBug(int id, pair<int, int> position, int direction, int health)
-    : Bug(id, position, direction, health) {}
+KnightBug::KnightBug(int id, pair<int, int> position, int direction, int health,
+                     int boardWidth, int boardHeight)
+    : Bug(id, position, direction, health, boardWidth, boardHeight) {}
 
 void KnightBug::move() {
     if (!alive) return;
@@ -21,7 +22,7 @@ void KnightBug::move() {
     for (const auto& move : knightMoves) {
         int newX = position.first + move.first;
         int newY = position.second + move.second;
-        if (newX >= 0 && newX < DEFAULT_BOARD_WIDTH && newY >= 0 && newY < DEFAULT_BOARD_HEIGHT) {
+        if (newX >= 0 && newX < boardWidth && newY >= 0 && newY < boardHeight) {
             validMoves.push_back({newX, newY});
         }
     }

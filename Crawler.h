@@ -5,7 +5,8 @@
 
 class Crawler : public Bug {
 public:
-    Crawler(int id, pair<int, int> position, int direction, int health);
+    Crawler(int id, pair<int, int> position, int direction, int health,
+            int boardWidth = 10, int boardHeight = 10);
     void move() override;
     string getType() const override;
 };

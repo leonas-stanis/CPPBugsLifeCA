@@ -22,15 +22,22 @@ protected:
     bool alive;
     int eatenBy;   // ID of the bug that ate this one (-1 if alive / not eaten)
     list<pair<int, int>> path;
+    int boardWidth;
+    int boardHeight;
 
 public:
-    Bug(int id, pair<int, int> position, int direction, int health);
+    Bug(int id, pair<int, int> position, int direction, int health,
+        int boardWidth = 10, int boardHeight = 10);
     int getEatenBy() const;
     void setEatenBy(int bugId);
     virtual ~Bug() = default;
     virtual void move() = 0;
     virtual string getType() const = 0;
     bool isWayBlocked();
+
+    int getBoardWidth() const;
+    int getBoardHeight() const;
+    void setBoardSize(int w, int h);
 
     int getId() const;
     pair<int, int> getPosition() const;
