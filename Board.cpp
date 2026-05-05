@@ -6,6 +6,8 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <thread>
+#include <chrono>
 
 
 Board::Board() = default;
@@ -279,4 +281,26 @@ void Board::displayAllCells() const {
         }
     }
     cout << "---------------------\n";
+}
+void Board::runSimulation() {
+    int initialAlive = countAlive();
+    if (initialAlive <= 1) {
+        cout << "Need at least 2 alive bugs to run simulation.\n";
+        return;
+    }
+
+    cout << "\n=== Running Simulation (Tap every 1 second) ===\n";
+    int tapCount = 0;
+
+    while (countAlive() > 1) {
+        tapCount++;
+        cout << "\n--- Tap #" << tapCount << " ---\n";
+        tap();
+        cout << "------------------------\n";
+        this_thread::sleep_for(chrono::seconds(1));
+    }
+
+    cout << "\n=== Simulation ended after " << tapCount << " taps. ===\n";
+    displayLifeHistory();
+    writeLifeHistoryToFile();
 }
