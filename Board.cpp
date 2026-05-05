@@ -304,3 +304,43 @@ void Board::runSimulation() {
     displayLifeHistory();
     writeLifeHistoryToFile();
 }
+
+void Board::writeLifeHistoryToFile() const {
+    time_t now = time(nullptr);
+    char buffer[80];
+    struct tm* timeinfo = localtime(&now);
+    strftime(buffer, sizeof(buffer), "bugs_life_history_%Y%m%d_%H%M%S.out", timeinfo);
+
+    string filename(buffer);
+    ofstream file(filename);
+
+    if (!file.is_open()) {
+        cerr << "Error: Could not create output file '" << filename << "'\n";
+        return;
+    }
+
+    file << "Bug Type,ID,Path,Status\n";
+    for (const Bug* bug : bugs) {
+        file << bug->getType() << "," << bug->getId() << ",[";
+        const auto& path = bug->getPath();
+        bool first = true;
+        for (const auto& pos : path) {
+            if (!first) file << ";";
+            file << "(" << pos.first << "," << pos.second << ")";
+            first = false;
+        }
+        file << "],";
+        file << (bug->isAlive() ? "Alive" : "Dead") << "\n";
+    }
+
+    file.close();
+    cout << "Life history written to '" << filename << "'\n";
+}
+
+int Board::countAlive() const {
+    int count = 0;
+    for (const Bug* bug : bugs) {
+        if (bug->isAlive()) count++;
+    }
+    return count;
+}
