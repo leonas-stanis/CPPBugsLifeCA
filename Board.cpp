@@ -1,6 +1,7 @@
 #include "Board.h"
 #include "Crawler.h"
 #include "Hopper.h"
+#include "KnightBug.h"
 
 #include <iostream>
 #include <fstream>
@@ -58,6 +59,8 @@ void Board::loadFromFile(const string& filename) {
         } else if (type == 'H' || type == 'h') {
             int hopLength = (fields.size() >= 7) ? stoi(fields[6]) : 2;
             bug = new Hopper(id, {x, y}, dir, health, hopLength);
+        } else if (type == 'K' || type == 'k') {
+            bug = new KnightBug(id, {x, y}, dir, health);
         }
 
         if (bug) {

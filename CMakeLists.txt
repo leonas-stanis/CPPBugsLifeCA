@@ -10,5 +10,7 @@ add_executable(untitled main.cpp
         Crawler.h
         Hopper.cpp
         Hopper.h
+        KnightBug.cpp
+        KnightBug.h
         Board.cpp
         Board.h)
