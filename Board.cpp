@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 
 Board::Board() = default;
@@ -111,4 +112,71 @@ void Board::findBug(int id) const {
         }
     }
     cout << "Bug " << id << " not found.\n";
+}
+map<pair<int, int>, vector<Bug*>> Board::getCellOccupancy() const {
+    map<pair<int, int>, vector<Bug*>> cellMap;
+    for (Bug* bug : bugs) {
+        if (bug->isAlive()) {
+            cellMap[bug->getPosition()].push_back(bug);
+        }
+    }
+    return cellMap;
+}
+
+void Board::fight() {
+    auto cellMap = getCellOccupancy();
+
+    for (auto& [pos, cellBugs] : cellMap) {
+        // Only keep alive bugs
+        vector<Bug*> aliveInCell;
+        for (Bug* b : cellBugs) {
+            if (b->isAlive()) aliveInCell.push_back(b);
+        }
+
+        if (aliveInCell.size() < 2) continue;
+
+        // Sort by health descending for pairing strategy
+        sort(aliveInCell.begin(), aliveInCell.end(), [](Bug* a, Bug* b) {
+            return a->getHealth() > b->getHealth();
+        });
+
+        cout << "   Cell (" << pos.first << "," << pos.second
+             << ") has " << aliveInCell.size() << " bugs fighting!\n";
+
+        // Pair up: (0,1), (2,3), etc.
+        for (size_t i = 0; i + 1 < aliveInCell.size(); i += 2) {
+            Bug* bug1 = aliveInCell[i];
+            Bug* bug2 = aliveInCell[i + 1];
+
+            cout << "   " << bug1->getType() << " " << bug1->getId()
+                 << " vs " << bug2->getType() << " " << bug2->getId() << "\n";
+
+            for (int round = 1; round <= 3; round++) {
+                if (!bug1->isAlive() || !bug2->isAlive()) break;
+
+                int damage1 = rand() % 6;
+                int damage2 = rand() % 6;
+
+                bug1->setHealth(bug1->getHealth() - damage1);
+                bug2->setHealth(bug2->getHealth() - damage2);
+
+                if (bug1->getHealth() <= 0) {
+                    bug1->setHealth(0);
+                    bug1->setAlive(false);
+                    cout << "      Bug " << bug1->getId() << " defeated in round " << round << "!\n";
+                }
+                if (bug2->getHealth() <= 0) {
+                    bug2->setHealth(0);
+                    bug2->setAlive(false);
+                    cout << "      Bug " << bug2->getId() << " defeated in round " << round << "!\n";
+                }
+            }
+        }
+
+        if (aliveInCell.size() % 2 == 1) {
+            Bug* lucky = aliveInCell.back();
+            cout << "   " << lucky->getType() << " " << lucky->getId()
+                 << " has no opponent and remains unscathed.\n";
+        }
+    }
 }
