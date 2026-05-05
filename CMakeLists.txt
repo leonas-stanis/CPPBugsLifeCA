@@ -7,4 +7,7 @@ add_executable(untitled main.cpp
         Bug.cpp
         Bug.h
         Crawler.cpp
-        Crawler.h)
+        Crawler.h
+        Hopper.cpp
+        Hopper.h
+        Hopper.cpp)
